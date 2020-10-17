@@ -1,0 +1,15 @@
+version: "3"
+services:
+  api-database:
+    image: mongo:latest
+    container_name: "api-database"
+    ports:
+      - 27017:27017
+    command: --serviceExecutor adaptive
+    # command: --smallfiles
+  api:
+    image: webshop-api-customer-docker-image
+    ports:
+      - 8081:8081
+    links:
+      - api-database

@@ -1,0 +1,52 @@
+version: "3"
+services:
+  api-database:
+    image: mongo:latest
+    container_name: "api-database"
+    ports:
+      - 27017:27017
+    command: --serviceExecutor adaptive
+    # command: --smallfiles
+
+  api-customer:
+    image: webshop-api-customer-docker-image
+    ports:
+      - 8081:8081
+    links:
+      - api-database
+
+  api-product:
+    image: webshop-api-product-docker-image
+    ports:
+      - 8082:8082
+    links:
+      - api-database
+
+  api-shopping:
+    image: webshop-api-shopping-docker-image
+    ports:
+      - 8083:8083
+    links:
+      - api-database
+      - api-product
+      - api-order
+
+  api-order:
+    image: webshop-api-order-docker-image
+    ports:
+      - 8084:8084
+    links:
+      - api-database
+      - api-customer
+
+  shop-client:
+    image: webshop-client-docker-image
+    ports:
+      - 8080:8080
+    links:
+      - api-database
+      - api-order
+      - api-customer
+      - api-product
+      - api-shopping
+  
